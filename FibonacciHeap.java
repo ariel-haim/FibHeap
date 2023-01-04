@@ -1,3 +1,5 @@
+
+
 /**
  * FibonacciHeap
  *
@@ -64,7 +66,8 @@ public class FibonacciHeap
     */
     public void deleteMin()
     {
-     	return; // should be replaced by student code
+        size--;
+        return; // should be replaced by student code
      	
     }
 
@@ -122,8 +125,9 @@ public class FibonacciHeap
     *
     */
     public void delete(HeapNode x) 
-    {    
-    	return; // should be replaced by student code
+    {
+    	this.decreaseKey(x, Integer.MIN_VALUE);
+        this.deleteMin(); // size is decreased here
     }
 
    /**
