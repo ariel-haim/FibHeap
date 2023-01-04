@@ -10,14 +10,18 @@ public class FibonacciHeap
     private int size;
     private HeapNode first;
     private HeapNode min;
-    private int totalCuts;
-    private int totalLinks;
+    private static int cutsNum;
+    private static int linksNum;
     private int markedNum;
-
+    private int treesNum;
     public FibonacciHeap(){
         this.size = 0;
         this.first = null;
         this.min = null;
+        cutsNum = 0;
+        linksNum = 0;
+        markedNum = 0;
+        treesNum = 0;
     }
    /**
     * public boolean isEmpty()
@@ -41,6 +45,7 @@ public class FibonacciHeap
     public HeapNode insert(int key)
     {
         size++;
+        treesNum++;
     	HeapNode newNode = new HeapNode(key);
         if (this.size == 1){
             min = newNode;
@@ -165,7 +170,7 @@ public class FibonacciHeap
     */
     public int potential() 
     {    
-        return -234; // should be replaced by student code
+        return this.treesNum + 2*markedNum; // should be replaced by student code
     }
 
    /**
@@ -178,7 +183,7 @@ public class FibonacciHeap
     */
     public static int totalLinks()
     {    
-    	return -345; // should be replaced by student code
+    	return linksNum;
     }
 
    /**
@@ -190,7 +195,7 @@ public class FibonacciHeap
     */
     public static int totalCuts()
     {    
-    	return -456; // should be replaced by student code
+    	return cutsNum;
     }
 
      /**
