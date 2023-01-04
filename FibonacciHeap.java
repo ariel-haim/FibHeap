@@ -5,7 +5,15 @@
  */
 public class FibonacciHeap
 {
+    private int size;
+    private HeapNode first;
+    private HeapNode min;
 
+    public FibonacciHeap(){
+        this.size = 0;
+        this.first = null;
+        this.min = null;
+    }
    /**
     * public boolean isEmpty()
     *
@@ -14,7 +22,7 @@ public class FibonacciHeap
     */
     public boolean isEmpty()
     {
-    	return false; // should be replaced by student code
+    	return size == 0; // should be replaced by student code
     }
 		
    /**
@@ -26,8 +34,26 @@ public class FibonacciHeap
     * Returns the newly created node.
     */
     public HeapNode insert(int key)
-    {    
-    	return new HeapNode(key); // should be replaced by student code
+    {
+        size++;
+    	HeapNode newNode = new HeapNode(key);
+        if (this.size == 1){
+            min = newNode;
+            first = newNode;
+            first.next = first;
+            first.prev = first;
+            return newNode;
+        }
+        else if (newNode.getKey() < min.getKey()){
+            min = newNode;
+        }
+        first.prev.next = newNode;
+        newNode.prev = first.prev;
+        first.prev = newNode;
+        newNode.next = first;
+        first = newNode;
+
+        return newNode;
     }
 
    /**
@@ -50,7 +76,7 @@ public class FibonacciHeap
     */
     public HeapNode findMin()
     {
-    	return new HeapNode(678);// should be replaced by student code
+    	return this.min;
     } 
     
    /**
@@ -72,7 +98,7 @@ public class FibonacciHeap
     */
     public int size()
     {
-    	return -123; // should be replaced by student code
+    	return size;
     }
     	
     /**
@@ -173,8 +199,25 @@ public class FibonacciHeap
         int[] arr = new int[100];
         return arr; // should be replaced by student code
     }
-    
-   /**
+
+    public void display()
+    {
+        System.out.print("\nHeap = ");
+        HeapNode ptr = first;
+        if (ptr == null)
+        {
+            System.out.print("Empty\n");
+            return;
+        }
+        do
+        {
+            System.out.print(ptr.getKey() +" ");
+            ptr = ptr.next;
+        } while (ptr != first && ptr.next != null);
+        System.out.println();
+    }
+
+    /**
     * public class HeapNode
     * 
     * If you wish to implement classes other than FibonacciHeap
@@ -184,13 +227,27 @@ public class FibonacciHeap
     public static class HeapNode{
 
     	public int key;
+        public int rank;
+        public boolean mark;
+        public HeapNode child;
+        public HeapNode next;
+        public HeapNode prev;
+        public HeapNode parent;
 
     	public HeapNode(int key) {
     		this.key = key;
+            this.rank = 0;
+            this.mark = false;
+            this.child = null;
+            this.next = null;
+            this.prev = null;
+            this.parent = null;
+
     	}
 
     	public int getKey() {
     		return this.key;
     	}
+
     }
 }
