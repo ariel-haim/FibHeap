@@ -10,6 +10,9 @@ public class FibonacciHeap
     private int size;
     private HeapNode first;
     private HeapNode min;
+    private int totalCuts;
+    private int totalLinks;
+    private int markedNum;
 
     public FibonacciHeap(){
         this.size = 0;
@@ -64,7 +67,7 @@ public class FibonacciHeap
     * Deletes the node containing the minimum key.
     *
     */
-    public void deleteMin()
+    public void deleteMin()  // min is never marked (its a root) so no markedNum--
     {
         size--;
         return; // should be replaced by student code
@@ -148,7 +151,7 @@ public class FibonacciHeap
     */
     public int nonMarked() 
     {    
-        return -232; // should be replaced by student code
+        return this.size - this.markedNum;
     }
 
    /**
