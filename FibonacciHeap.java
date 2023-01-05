@@ -1,5 +1,7 @@
-
-
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.Math;
 /**
  * FibonacciHeap
  *
@@ -10,16 +12,15 @@ public class FibonacciHeap
     private int size;
     private HeapNode first;
     private HeapNode min;
-    private static int cutsNum;
-    private static int linksNum;
+    private static int cutsNum = 0;
+    private static int linksNum = 0;
     private int markedNum;
     private int treesNum;
+
     public FibonacciHeap(){
         this.size = 0;
         this.first = null;
         this.min = null;
-        cutsNum = 0;
-        linksNum = 0;
         markedNum = 0;
         treesNum = 0;
     }
@@ -75,11 +76,92 @@ public class FibonacciHeap
     public void deleteMin()  // min is never marked (its a root) so no markedNum--
     {
         size--;
-        return; // should be replaced by student code
+        treesNum = treesNum + min.rank; // temporary before console-dating
+        createRootsFromChildren(min);
+
+        min.child.prev.next = min.next;
+        min.next.prev = min.child.prev;
+        min.child.prev = min.prev;
+        min.prev.next = min.child;
+        min.child.parent = null;
+        if (min == first){
+            if (min.rank == 0) {
+                first = first.next;
+            }
+            else {
+                first = first.child;
+            }
+        }
+
+        successiveLinking();
+        /// find new minimum
+        updateMinimum();
      	
     }
 
-   /**
+    private void successiveLinking() {
+        int numOfRanks =(int) (Math.log(size) / Math.log(2))+1;
+        HeapNode[] rankList = new HeapNode[numOfRanks];
+        HeapNode currTree = first;
+
+        for (int i = 0; i < treesNum; i++) {
+            HeapNode newTree = currTree;
+            while (rankList[newTree.rank] != null) {
+                newTree = link(currTree, rankList[currTree.rank]);
+                rankList[newTree.rank-1] = null;
+            }
+            rankList[newTree.rank] = newTree;
+        }
+        /// now go over the array and link new trees + update treeNum WHEN DOING SO
+        FibonacciHeap newHeap = new FibonacciHeap();
+        for (int i=rankList.length-1; i==0; i--){
+            if (rankList[i] != null){
+                // add to heap
+            }
+        }
+        /// update ALL FIELDS so this.heap ===== newHeap
+    }
+
+    private HeapNode link(HeapNode node1, HeapNode node2) {
+        HeapNode newRoot = node1;
+        HeapNode newChild = node2;
+        if (node2.getKey()<node1.getKey()) {
+            newRoot = node2;
+            newChild = node1;
+        }
+        newChild.next = newRoot.child;
+        newChild.prev = newRoot.child.prev;
+        newRoot.child.prev.next = newChild;
+        newRoot.child.prev = newChild;
+        newRoot.child = newChild;
+        newChild.parent = newRoot;
+
+        newRoot.rank++; // update rank of linked tree
+        linksNum++;
+        return newRoot;
+    }
+    private void updateMinimum() {
+        HeapNode curr_node = first;
+        int minimum = first.getKey();
+        for (int i=1; i < treesNum; i++) {
+            if (curr_node.getKey() <= minimum) {
+                minimum = curr_node.getKey();
+                min = curr_node;
+            }
+            curr_node = curr_node.next;
+        }
+    }
+
+    private void createRootsFromChildren(HeapNode parent) {
+        HeapNode curr_node = parent.child;
+        for (int i=0; i<min.rank; i++) {
+            curr_node.mark = false;
+            curr_node.parent = null;
+            curr_node = curr_node.next;
+        }
+    }
+
+    /**
     * public HeapNode findMin()
     *
     * Returns the node of the heap whose key is minimal, or null if the heap is empty.
