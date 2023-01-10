@@ -159,6 +159,14 @@ public class t {
         System.out.println(heap2.potential());
         heap2.delete(n2);
         t.print(heap2, false);
+        FibonacciHeap heapy = new FibonacciHeap();
+        FibonacciHeap.HeapNode[] nodes = new FibonacciHeap.HeapNode[7];
+        for (int i=0; i<7; i++){
+            FibonacciHeap.HeapNode node = heapy.insert(i);
+            nodes[i] = node;
+        }
+        heapy.delete(nodes[0]);
+        System.out.println();
         System.out.println(Arrays.toString(heap2.countersRep()));
         System.out.println(heap2.potential());
         System.out.println(FibonacciHeap.getCutsNum());

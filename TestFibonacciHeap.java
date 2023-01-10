@@ -26,7 +26,7 @@ public class TestFibonacciHeap {
     final static String CHILD_FIELD = "child";
     final static String NEXT_FIELD = "next";
     final static String PARENT_FILED = "parent";
-    final static String MARK_FILED = "marked";
+    final static String MARK_FILED = "mark";
     final static String RANK_FILED = "rank";
 
     static Random rnd;

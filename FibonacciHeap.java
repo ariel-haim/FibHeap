@@ -16,6 +16,8 @@ public class FibonacciHeap
     private static int linksNum = 0;
     private int markedNum;
     private int treesNum;
+    private static final double GOLDEN = ( 1 + Math.sqrt(5))/2;
+
 
     public FibonacciHeap(){ // note: do not remove empty constructor
         this.size = 0;
@@ -116,18 +118,18 @@ public class FibonacciHeap
     }
 
     private void successiveLinking() {
-        int numOfRanks =(int) (Math.log(size) / Math.log(2))+1;
+        int numOfRanks =(int) (Math.log(size) / Math.log(GOLDEN))+1;
         HeapNode[] rankList = new HeapNode[numOfRanks];
         HeapNode currTree = first;
 
         for (int i = 0; i < treesNum; i++) {
-            HeapNode newTree = currTree;
-            while (rankList[newTree.rank] != null) {
-                newTree = link(newTree, rankList[currTree.rank]);
-                rankList[newTree.rank-1] = null;
+            HeapNode nextTree = currTree.next;
+            while (rankList[currTree.rank] != null) {
+                currTree = link(currTree, rankList[currTree.rank]);
+                rankList[currTree.rank-1] = null;
             }
-            rankList[newTree.rank] = newTree;
-            currTree = currTree.next;
+            rankList[currTree.rank] = currTree;
+            currTree = nextTree;
         }
         /// now go over the array and link new trees + update treeNum WHEN DOING SO
         HeapNode node = null;
@@ -192,6 +194,9 @@ public class FibonacciHeap
     private void createRootsFromChildren(HeapNode parent) {
         HeapNode curr_node = parent.child;
         for (int i=0; i<min.rank; i++) {
+            if (curr_node.mark) {
+                markedNum--;
+            }
             curr_node.mark = false;
             curr_node.parent = null;
             curr_node = curr_node.next;
@@ -255,13 +260,21 @@ public class FibonacciHeap
     * 
     */
     public int[] countersRep() {
-        int numOfRanks =(int) (Math.log(size) / Math.log(2))+1;
+        if (size==0){
+            return new int[0];
+        }
+        int numOfRanks =(int) (Math.log(size) / Math.log(GOLDEN))+1;
     	int[] arr = new int[numOfRanks];
         HeapNode currNode = first;
         for (int i=0; i<treesNum; i++) {
             arr[currNode.rank]++;
             currNode = currNode.next;
         }
+        int rlen = arr.length;
+        while (arr[rlen-1] == 0) {
+            --rlen;
+        }
+        arr = Arrays.copyOf(arr, rlen);
         return arr;
     }
 	
@@ -297,30 +310,38 @@ public class FibonacciHeap
             return;
         }
         cascadingCuts(x); // do all cuts needed + update CUTSNUM and NUMTREES and MARKEDNUM
-        return;
     }
 
     public void cascadingCuts(HeapNode x) {// do all cuts needed + update CUTSNUM and NUMTREES and MARKEDNUM
         HeapNode parent = x.parent;
         x.prev.next = x.next;
         x.next.prev = x.prev;
-        x.parent.child = x.next;
+        if (x.parent.rank == 1) {
+            x.parent.child = null;
+        }
+        else {
+            x.parent.child = x.next;
+        }
         x.parent = null;
         saveNewRootFirst(x);
 
         // updates
+        if (x.mark) {
+            markedNum--;
+        }
         x.mark = false;
         cutsNum++;
         treesNum++;
-
+        parent.rank--;
         if (parent.mark) {
             markedNum--;
             cascadingCuts(parent);
         }
         else {
-            parent.mark = true;
-            parent.rank--;
-            markedNum++;
+            if (parent.parent != null) {
+                parent.mark = true;
+                markedNum++;
+            }
         }
     }
 
