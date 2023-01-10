@@ -103,7 +103,12 @@ public class FibonacciHeap
             min.next.prev = min.prev;
             min.prev.next = min.next;
         }
-
+        if (treesNum == 0){
+            this.first = null;
+            this.min = null;
+            markedNum = 0;
+            return;
+        }
         successiveLinking();
         /// find new minimum
         updateMinimum();
@@ -314,6 +319,7 @@ public class FibonacciHeap
         }
         else {
             parent.mark = true;
+            parent.rank--;
             markedNum++;
         }
     }
@@ -376,9 +382,27 @@ public class FibonacciHeap
     * ###CRITICAL### : you are NOT allowed to change H. 
     */
     public static int[] kMin(FibonacciHeap H, int k)
-    {    
-        int[] arr = new int[100];
-        return arr; // should be replaced by student code
+    {
+        int[] arr = new int[k];
+        FibonacciHeap heapHelper = new FibonacciHeap();
+        HeapNode newNode = heapHelper.insert(H.min.getKey());
+        newNode.pointer = H.min;
+        for (int i = 0; i < k; i++) {
+            HeapNode nextMin = heapHelper.findMin().pointer;
+            arr[i] = nextMin.getKey();
+            heapHelper.deleteMin();
+
+            int numChildren = nextMin.rank;
+            if (numChildren != 0) {
+                HeapNode curr_child = nextMin.child;
+                for (int j = 0; j<numChildren; j++) {
+                    HeapNode newChild = heapHelper.insert(curr_child.getKey());
+                    newChild.pointer = curr_child;
+                    curr_child = curr_child.next;
+                }
+            }
+        }
+        return arr;
     }
 
 
@@ -398,6 +422,7 @@ public class FibonacciHeap
         public HeapNode next;
         public HeapNode prev;
         public HeapNode parent;
+        public HeapNode pointer;
 
     	public HeapNode(int key) {
     		this.key = key;
@@ -409,6 +434,17 @@ public class FibonacciHeap
             this.parent = null;
 
     	}
+        public HeapNode(int key, HeapNode originalNode) {
+            this.key = key;
+            this.rank = 0;
+            this.mark = false;
+            this.child = null;
+            this.next = null;
+            this.prev = null;
+            this.parent = null;
+            this.pointer = originalNode;
+
+        }
 
     	public int getKey() {
     		return this.key;
