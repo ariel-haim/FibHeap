@@ -17,7 +17,7 @@ public class FibonacciHeap
     private int markedNum;
     private int treesNum;
 
-    public FibonacciHeap(){
+    public FibonacciHeap(){ // note: do not remove empty constructor
         this.size = 0;
         this.first = null;
         this.min = null;
@@ -80,14 +80,9 @@ public class FibonacciHeap
     public void deleteMin()  // min is never marked (its a root) so no markedNum--
     {
         size--;
-        treesNum = treesNum + min.rank; // temporary before console-dating
+        treesNum = treesNum + min.rank - 1; // temporary before console-dating
         createRootsFromChildren(min);
 
-        min.child.prev.next = min.next;
-        min.next.prev = min.child.prev;
-        min.child.prev = min.prev;
-        min.prev.next = min.child;
-        min.child.parent = null;
         if (min == first){
             if (min.rank == 0) {
                 first = first.next;
@@ -95,6 +90,18 @@ public class FibonacciHeap
             else {
                 first = first.child;
             }
+        }
+        if (min.rank != 0) {
+            min.child.prev.next = min.next;
+            min.next.prev = min.child.prev;
+            min.child.prev = min.prev;
+            min.prev.next = min.child;
+            min.child.parent = null;
+        }
+
+        if (min.rank == 0) {
+            min.next.prev = min.prev;
+            min.prev.next = min.next;
         }
 
         successiveLinking();
@@ -111,20 +118,23 @@ public class FibonacciHeap
         for (int i = 0; i < treesNum; i++) {
             HeapNode newTree = currTree;
             while (rankList[newTree.rank] != null) {
-                newTree = link(currTree, rankList[currTree.rank]);
+                newTree = link(newTree, rankList[currTree.rank]);
                 rankList[newTree.rank-1] = null;
             }
             rankList[newTree.rank] = newTree;
+            currTree = currTree.next;
         }
         /// now go over the array and link new trees + update treeNum WHEN DOING SO
         HeapNode node = null;
         this.treesNum = 0;
-        for (int i=rankList.length-1; i==0; i--){
+        for (int i = rankList.length-1 ; i>=0; i--){
             if (rankList[i] != null) {
                 this.treesNum++;
                 HeapNode newNode = rankList[i];
                 if(node == null){
                     node = newNode;
+                    node.prev = newNode;
+                    node.next = newNode;
                     continue;
                 }
                 node.prev.next = newNode;
@@ -144,13 +154,20 @@ public class FibonacciHeap
             newRoot = node2;
             newChild = node1;
         }
-        newChild.next = newRoot.child;
-        newChild.prev = newRoot.child.prev;
-        newRoot.child.prev.next = newChild;
-        newRoot.child.prev = newChild;
-        newRoot.child = newChild;
-        newChild.parent = newRoot;
-
+        if (newRoot.rank == 0) {
+            newChild.next = newChild;
+            newChild.prev = newChild;
+            newRoot.child = newChild;
+            newChild.parent = newRoot;
+        }
+        else {
+            newChild.next = newRoot.child;
+            newChild.prev = newRoot.child.prev;
+            newRoot.child.prev.next = newChild;
+            newRoot.child.prev = newChild;
+            newRoot.child = newChild;
+            newChild.parent = newRoot;
+        }
         newRoot.rank++; // update rank of linked tree
         linksNum++;
         return newRoot;
@@ -158,7 +175,7 @@ public class FibonacciHeap
     private void updateMinimum() {
         HeapNode curr_node = first;
         int minimum = first.getKey();
-        for (int i=1; i < treesNum; i++) {
+        for (int i=0; i < treesNum; i++) {
             if (curr_node.getKey() <= minimum) {
                 minimum = curr_node.getKey();
                 min = curr_node;
@@ -265,6 +282,12 @@ public class FibonacciHeap
     public void decreaseKey(HeapNode x, int delta)
     {
         x.key -= delta;
+        if (x.getKey() < min.getKey()) { // update minimum
+            min = x;
+        }
+        if (x.parent == null) { // avoid null pointer
+            return;
+        }
         if (x.getKey()>x.parent.getKey()) {
             return;
         }
