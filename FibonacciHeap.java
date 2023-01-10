@@ -404,6 +404,29 @@ public class FibonacciHeap
         }
         return arr;
     }
+    public HeapNode getFirst() {
+        return first;
+    }
+
+    public HeapNode getMin() {
+        return min;
+    }
+
+    public static int getCutsNum() {
+        return cutsNum;
+    }
+
+    public static int getLinksNum() {
+        return linksNum;
+    }
+
+    public int getMarkedNum() {
+        return markedNum;
+    }
+
+    public int getTreesNum() {
+        return treesNum;
+    }
 
 
     /**
@@ -434,6 +457,7 @@ public class FibonacciHeap
             this.parent = null;
 
     	}
+
         public HeapNode(int key, HeapNode originalNode) {
             this.key = key;
             this.rank = 0;
@@ -446,9 +470,38 @@ public class FibonacciHeap
 
         }
 
-    	public int getKey() {
+        public int getRank() {
+            return rank;
+        }
+
+        public int getKey() {
     		return this.key;
     	}
+
+        public boolean isMarked() {
+            return mark;
+        }
+
+        public HeapNode getChild() {
+            return child;
+        }
+
+        public HeapNode getNext() {
+            return next;
+        }
+
+        public HeapNode getPrevious() {
+            return prev;
+        }
+
+        public HeapNode getParent() {
+            return parent;
+        }
+
+        public HeapNode getPointer() {
+            return pointer;
+        }
+
 
     }
 }

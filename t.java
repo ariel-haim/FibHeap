@@ -121,7 +121,7 @@ public class t {
         stream.println("╮");
         ArrayList<Boolean> list = new ArrayList<>();
         list.add(false);
-        printHeapNode(heap.first, null, list, verbose);
+        printHeapNode(heap.getFirst(), null, list, verbose);
     }
 
     public static void demo() {
@@ -161,11 +161,11 @@ public class t {
         t.print(heap2, false);
         System.out.println(Arrays.toString(heap2.countersRep()));
         System.out.println(heap2.potential());
-        System.out.println(FibonacciHeap.TOTAL_CUTS);
-        System.out.println(heap2.minimum.isMarked());
+        System.out.println(FibonacciHeap.getCutsNum());
+        System.out.println(heap2.getMin().isMarked());
         heap2.delete(n0);
         t.print(heap2, false);
-        heap2.delete(heap2.minimum);
+        heap2.delete(heap2.getMin());
         t.print(heap2, false);
 
         FibonacciHeap heap3 = new FibonacciHeap();
@@ -205,11 +205,11 @@ public class t {
             heap.decreaseKey(array.get(i), m+1);
         }
         //heap.decreaseKey(extra, m+1);
-        stream.println("Marked: "+ heap.marked_counter);
-        stream.println("Tress: "+ heap.trees_counter);
+        stream.println("Marked: "+ heap.getMarkedNum());
+        stream.println("Tress: "+ heap.getTreesNum());
         stream.println("Potential: "+ heap.potential());
-        stream.println(FibonacciHeap.TOTAL_LINKS);
-        stream.println(FibonacciHeap.TOTAL_CUTS);
+        stream.println(FibonacciHeap.getLinksNum());
+        stream.println(FibonacciHeap.getCutsNum());
 
         //stream.println("Printing in regular mode:");
         //t.print(heap, false);
@@ -231,11 +231,11 @@ public class t {
         for (int i = 1; i <= 3*(m/4); i++) {
             heap.deleteMin();
         }
-        stream.println("Marked: "+ heap.marked_counter);
-        stream.println("Trees: "+ heap.trees_counter);
+        stream.println("Marked: "+ heap.getMarkedNum());
+        stream.println("Trees: "+ heap.getTreesNum());
         stream.println("Potential: "+ heap.potential());
-        stream.println(FibonacciHeap.TOTAL_LINKS);
-        stream.println(FibonacciHeap.TOTAL_CUTS);
+        stream.println(FibonacciHeap.getLinksNum());
+        stream.println(FibonacciHeap.getCutsNum());
 
         //stream.println("Printing in regular mode:");
         //t.print(heap, false);
