@@ -81,6 +81,9 @@ public class FibonacciHeap
     */
     public void deleteMin()  // min is never marked (its a root) so no markedNum--
     {
+        if (isEmpty()){
+            return;
+        }
         size--;
         treesNum = treesNum + min.rank - 1; // temporary before console-dating
         createRootsFromChildren(min);
@@ -133,11 +136,12 @@ public class FibonacciHeap
         }
         /// now go over the array and link new trees + update treeNum WHEN DOING SO
         HeapNode node = null;
+        HeapNode newNode = null;
         this.treesNum = 0;
-        for (int i = rankList.length-1 ; i>=0; i--){
+        for (int i = 0 ; i<rankList.length; i++){
             if (rankList[i] != null) {
                 this.treesNum++;
-                HeapNode newNode = rankList[i];
+                newNode = rankList[i];
                 if(node == null){
                     node = newNode;
                     node.prev = newNode;
@@ -195,6 +199,9 @@ public class FibonacciHeap
         HeapNode curr_node = parent.child;
         for (int i=0; i<min.rank; i++) {
             if (curr_node.mark) {
+                if (markedNum == 0) {
+                    System.out.println("");
+                }
                 markedNum--;
             }
             curr_node.mark = false;
@@ -239,6 +246,12 @@ public class FibonacciHeap
             min = heap2.min;
         }
         treesNum += treesNum;
+
+        first.prev.next = heap2.first;
+        heap2.first.prev.next = first;
+        first.prev = heap2.first.prev;
+        heap2.first.prev = first.prev;
+
     }
 
    /**
@@ -327,6 +340,9 @@ public class FibonacciHeap
 
         // updates
         if (x.mark) {
+            if (markedNum == 0) {
+                int i = 0;
+            }
             markedNum--;
         }
         x.mark = false;
@@ -334,7 +350,6 @@ public class FibonacciHeap
         treesNum++;
         parent.rank--;
         if (parent.mark) {
-            markedNum--;
             cascadingCuts(parent);
         }
         else {

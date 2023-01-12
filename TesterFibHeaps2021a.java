@@ -68,7 +68,12 @@ public class TesterFibHeaps2021a {
     /** score_track[0] is the number of successes, score_track[1] is the total number of checks. */
     static void update_counters(boolean condition, int[] score_track) {
         score_track[1]++; // Always increase the number of checks.
-        if (condition) score_track[0]++; // Increase success count only if condition holds.
+        if (condition) {
+            score_track[0]++;
+        } // Increase success count only if condition holds.
+        else{
+            System.out.println();
+        }
     }
 
     private static void runWithInterrupt(int[] success, Thread thread, int idx) {
@@ -142,6 +147,7 @@ public class TesterFibHeaps2021a {
     }
     static void fillInOrder(FibonacciHeap H, int startValue, int countItems, int stepSize) {
         for (int i=0;i<countItems;i++) {
+            int res = startValue + i*stepSize;
             H.insert(startValue + i*stepSize);
         }
     }
@@ -266,6 +272,7 @@ public class TesterFibHeaps2021a {
             update_counters(H.potential() == 3, counters); // 3 trees, no marked nodes.
             return (MAX_TESTS_SCORE * counters[0]) / counters[1];
         }
+
 
         int testForestAndConsolidationLogicNonEmpties() {
             // choosing the values 10,22 and 10+22=32 also verifies indirectly that consolidation
