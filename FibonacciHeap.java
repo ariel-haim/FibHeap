@@ -245,7 +245,7 @@ public class FibonacciHeap
         if (heap2.min.getKey() < min.getKey()) {
             min = heap2.min;
         }
-        treesNum += treesNum;
+        treesNum += heap2.treesNum;
 
         first.prev.next = heap2.first;
         heap2.first.prev.next = first;

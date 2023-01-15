@@ -12,6 +12,7 @@ public class Tester {
         System.out.println(heap.findMin().getKey());
         System.out.println(pointer.getKey());
         heap.decreaseKey(pointer,100);
+        // heap.delete(pointer);
         System.out.println(heap.findMin().getKey());
 
         FibonacciHeap heap2 = new FibonacciHeap();
