@@ -249,8 +249,9 @@ public class FibonacciHeap
 
         first.prev.next = heap2.first;
         heap2.first.prev.next = first;
+        HeapNode tmp = first.prev;
         first.prev = heap2.first.prev;
-        heap2.first.prev = first.prev;
+        heap2.first.prev = tmp;
 
     }
 
@@ -419,6 +420,9 @@ public class FibonacciHeap
     */
     public static int[] kMin(FibonacciHeap H, int k)
     {
+        if (k == 0){
+            return new int[0];
+        }
         int[] arr = new int[k];
         FibonacciHeap heapHelper = new FibonacciHeap();
         HeapNode newNode = heapHelper.insert(H.min.getKey());
@@ -510,6 +514,14 @@ public class FibonacciHeap
             return rank;
         }
 
+        public boolean getMark() {
+            return mark;
+        }
+
+        public boolean getMarked() {
+            return mark;
+        }
+
         public int getKey() {
     		return this.key;
     	}
@@ -527,6 +539,9 @@ public class FibonacciHeap
         }
 
         public HeapNode getPrevious() {
+            return prev;
+        }
+        public HeapNode getPrev() {
             return prev;
         }
 
