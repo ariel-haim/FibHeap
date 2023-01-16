@@ -65,6 +65,11 @@ public class FibonacciHeap
         return newNode;
     }
 
+    /**
+     *
+     * @param newNode
+     * puts the newly inserted node as the first HeapNode of the heap
+     */
     private void saveNewRootFirst(HeapNode newNode){
         first.prev.next = newNode;
         newNode.prev = first.prev;
@@ -120,6 +125,12 @@ public class FibonacciHeap
      	
     }
 
+    /**
+     * commits succesive linking:
+     * links between 2 trees with the same rank until we're left with one tree
+     * called after deleting the minimum
+     */
+
     private void successiveLinking() {
         int numOfRanks =(int) (Math.log(size) / Math.log(GOLDEN))+1;
         HeapNode[] rankList = new HeapNode[numOfRanks];
@@ -158,6 +169,15 @@ public class FibonacciHeap
         /// update ALL FIELDS so this.heap ===== newHeap /except size,min
     }
 
+    /**
+     * @pre: node1 and node2 have the same rank
+     * @param node1
+     * @param node2
+     * links between node1 and node2, the node with the minimal key will be the new root
+     * and the other one will be the child
+     * @return node that links between node1 and node2
+     */
+
     private HeapNode link(HeapNode node1, HeapNode node2) {
         HeapNode newRoot = node1;
         HeapNode newChild = node2;
@@ -183,6 +203,10 @@ public class FibonacciHeap
         linksNum++;
         return newRoot;
     }
+
+    /**
+     * after deleteMin, we need to find the new minimal node from the roots
+     */
     private void updateMinimum() {
         HeapNode curr_node = first;
         int minimum = first.getKey();
@@ -195,6 +219,11 @@ public class FibonacciHeap
         }
     }
 
+    /**
+     *
+     * @param parent
+     * adds the children of parent as new roots in the heap
+     */
     private void createRootsFromChildren(HeapNode parent) {
         HeapNode curr_node = parent.child;
         for (int i=0; i<min.rank; i++) {
@@ -326,6 +355,14 @@ public class FibonacciHeap
         cascadingCuts(x); // do all cuts needed + update CUTSNUM and NUMTREES and MARKEDNUM
     }
 
+    /**
+     *
+     * @param x: the node who's key was decreased
+     *         after decreseaing the key of a node we need to cut the node from its parent
+     *         if the node's key is smaller than its parent.
+     *         if the parent is marked, then we cut its as well, otherwise we mark it and stop
+     *         continue recursively
+     */
     public void cascadingCuts(HeapNode x) {// do all cuts needed + update CUTSNUM and NUMTREES and MARKEDNUM
         HeapNode parent = x.parent;
         x.prev.next = x.next;
@@ -341,9 +378,6 @@ public class FibonacciHeap
 
         // updates
         if (x.mark) {
-            if (markedNum == 0) {
-                int i = 0;
-            }
             markedNum--;
         }
         x.mark = false;
@@ -415,7 +449,10 @@ public class FibonacciHeap
     *
     * This static function returns the k smallest elements in a Fibonacci heap that contains a single tree.
     * The function should run in O(k*deg(H)). (deg(H) is the degree of the only tree in H.)
-    *  
+      * we use a helper heap, and insert the children of the current minimal node, to the helper heap,
+      * as one of them is definitely the next minimal node.
+      * we do it k times, and each time the rank of the minimal node is deg(H) at most.
+      * hence, the time complexity is as required.
     * ###CRITICAL### : you are NOT allowed to change H. 
     */
     public static int[] kMin(FibonacciHeap H, int k)
@@ -444,26 +481,51 @@ public class FibonacciHeap
         }
         return arr;
     }
+
+    /**
+     *
+     * @return the first node of the heap
+     */
     public HeapNode getFirst() {
         return first;
     }
 
+    /**
+     *
+     * @return the minimal node of the heap
+     */
     public HeapNode getMin() {
         return min;
     }
 
+    /**
+     *
+     * @return how many cuts were made through the program
+     */
     public static int getCutsNum() {
         return cutsNum;
     }
 
+    /**
+     *
+     * @return how many links were made through the program
+     */
     public static int getLinksNum() {
         return linksNum;
     }
 
+    /**
+     *
+     * @return how many nodes are marked
+     */
     public int getMarkedNum() {
         return markedNum;
     }
 
+    /**
+     *
+     * @return the number of trees in the heap
+     */
     public int getTreesNum() {
         return treesNum;
     }
