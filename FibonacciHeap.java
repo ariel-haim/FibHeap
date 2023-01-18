@@ -65,6 +65,11 @@ public class FibonacciHeap
         return newNode;
     }
 
+    /**
+     *
+     * @param newNode
+     * puts the newly inserted node as the first HeapNode of the heap
+     */
     private void saveNewRootFirst(HeapNode newNode){
         first.prev.next = newNode;
         newNode.prev = first.prev;
