@@ -41,6 +41,7 @@ public class Theory {
     private static void Q2() {
         int i = 14;
         int m = (int) Math.pow(3,i) -1;
+        m=20;
         System.out.println("Started M=3^"+i+"-1");
         long startTime = System.nanoTime();
         Q2_run(m);
@@ -58,6 +59,8 @@ public class Theory {
         int res = (int) (0.75*m);
         for (int k=0; k<=res; k++){
             heap.deleteMin();
+            System.out.println(heap.getLinksNum());
+            t.print(heap,false);
         }
         System.out.println("links: " + FibonacciHeap.getLinksNum());
         System.out.println("cuts: " + FibonacciHeap.getCutsNum());

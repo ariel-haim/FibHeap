@@ -65,11 +65,6 @@ public class FibonacciHeap
         return newNode;
     }
 
-    /**
-     *
-     * @param newNode
-     * puts the newly inserted node as the first HeapNode of the heap
-     */
     private void saveNewRootFirst(HeapNode newNode){
         first.prev.next = newNode;
         newNode.prev = first.prev;
@@ -90,7 +85,7 @@ public class FibonacciHeap
             return;
         }
         size--;
-        treesNum = treesNum + min.rank - 1; // temporary before console-dating
+        treesNum = treesNum + min.rank - 1; // temporary before consolidating
         createRootsFromChildren(min);
 
         if (min == first){
@@ -228,9 +223,7 @@ public class FibonacciHeap
         HeapNode curr_node = parent.child;
         for (int i=0; i<min.rank; i++) {
             if (curr_node.mark) {
-                if (markedNum == 0) {
-                    System.out.println("");
-                }
+
                 markedNum--;
             }
             curr_node.mark = false;
@@ -388,7 +381,7 @@ public class FibonacciHeap
             cascadingCuts(parent);
         }
         else {
-            if (parent.parent != null) {
+            if (parent.parent != null) { // parent is not root
                 parent.mark = true;
                 markedNum++;
             }
