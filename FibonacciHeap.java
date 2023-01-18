@@ -19,7 +19,7 @@ public class FibonacciHeap
     private static final double GOLDEN = ( 1 + Math.sqrt(5))/2;
 
 
-    public FibonacciHeap(){ // note: do not remove empty constructor
+    public FibonacciHeap(){
         this.size = 0;
         this.first = null;
         this.min = null;
@@ -34,7 +34,7 @@ public class FibonacciHeap
     */
     public boolean isEmpty()
     {
-    	return size == 0; // should be replaced by student code
+    	return size == 0;
     }
 		
    /**
@@ -166,7 +166,7 @@ public class FibonacciHeap
             }
         }
         this.first = node;
-        /// update ALL FIELDS so this.heap ===== newHeap /except size,min
+        /// update first so this.heap ===== newHeap
     }
 
     /**
@@ -350,7 +350,7 @@ public class FibonacciHeap
         if (x.getKey()>x.parent.getKey()) {
             return;
         }
-        cascadingCuts(x); // do all cuts needed + update CUTSNUM and NUMTREES and MARKEDNUM
+        cascadingCuts(x);
     }
 
     /**
@@ -368,7 +368,7 @@ public class FibonacciHeap
         if (x.parent.rank == 1) {
             x.parent.child = null;
         }
-        else {
+        else if(x.parent.child == x){
             x.parent.child = x.next;
         }
         x.parent = null;
@@ -414,7 +414,7 @@ public class FibonacciHeap
     */
     public int potential() 
     {    
-        return this.treesNum + 2*markedNum; // should be replaced by student code
+        return this.treesNum + 2*markedNum;
     }
 
    /**
